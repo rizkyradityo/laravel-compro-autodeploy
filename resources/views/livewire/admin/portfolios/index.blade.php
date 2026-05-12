@@ -1,7 +1,8 @@
 @push('styles', '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">')
-<div class="mb-4">
-    <h2 class="text-2xl font-bold text-gray-800">Portfolio Management</h2>
-</div>
+<div>
+    <div class="mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Portfolio Management</h2>
+    </div>
 
 <div class="flex flex-col sm:flex-row sm:gap-4 mb-4">
     <div class="flex items-center space-x-2">
@@ -12,8 +13,8 @@
     </div>
 </div>
 
-@if($message)
-    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ $message }}</div>
+@if(session('message'))
+    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('message') }}</div>
 @endif
 
 <table class="w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
@@ -34,7 +35,7 @@
                 <td class="px-4 py-3">{{ $portfolio->slug }}</td>
                 <td class="px-4 py-3">
                     @if($portfolio->media)
-                        <img src="{{ $portfolio->media->file_path }}" class="h-12 w-16 object-cover rounded"/>
+                        <img src="{{ asset($portfolio->media->file_path) }}" class="h-12 w-16 object-cover rounded"/>
                     @else
                         <span class="text-gray-400">No image</span>
                     @endif
@@ -94,8 +95,8 @@
                 </div>
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1">Cover Image</label>
-                    @if($portfolio?.media_id)
-                        <img src="{{ \$portfolio->media->file_path }}" class="h-24 w-auto rounded mb-2"/>
+                    @if($portfolio?->media_id)
+                        <img src="{{ asset($portfolio->media->file_path) }}" class="h-24 w-auto rounded mb-2"/>
                     @endif
                     <input type="file" wire:model="photo" class="text-sm"/>
                     @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
@@ -116,3 +117,4 @@
         </div>
     </div>
 @endif
+</div>

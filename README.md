@@ -1,213 +1,66 @@
-"# Laravel Company Profile CMS
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-A modern, responsive company website with full admin panel built with Laravel 10, Livewire 3, and Tailwind CSS.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
-## ✨ Features
+## About Laravel
 
-### Admin Panel
-- 📊 **Dashboard** - Overview statistics and analytics
-- 📄 **Page Management** - Manage Home, About, Contact pages
-- ⚙️ **Services CRUD** - Full service management with images
-- 💼 **Portfolio** - Portfolio project showcase
-- 📰 **Blog System** - Complete blog with search and categories
-- 🖼️ **Media Manager** - Centralized file management
-- ✉️ **Contact Messages** - Message management with read/unread status
-- 👥 **User Management** - Admin and user roles
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-### Frontend
-- 🎨 **Modern Design** - Clean, responsive UI
-- 📱 **Mobile First** - Fully responsive design
-- 🔍 **Search** - Content search functionality
-- 🖼️ **Image Support** - Media attachments for all content
-- ⚡ **Fast Loading** - Optimized performance
-- 📧 **Contact Form** - Functional contact form with attachments
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-## 🛠️ Tech Stack
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-- **Backend:** Laravel 10, Livewire 3
-- **Frontend:** Tailwind CSS, Alpine.js
-- **Database:** MySQL/MariaDB
-- **File Upload:** Laravel Storage
-- **Icons:** Font Awesome 6
+## Learning Laravel
 
-## 📋 Requirements
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-- PHP >= 8.1
-- Composer
-- Node.js & NPM
-- MySQL/MariaDB
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
-## 🚀 Installation
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-1. **Clone repository**
-```bash
-git clone <repository-url>
-cd laravel-compro
-```
+## Laravel Sponsors
 
-2. **Install dependencies**
-```bash
-composer install
-npm install
-```
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-3. **Environment setup**
-```bash
-cp .env.example .env
-php artisan key:generate
-```
+### Premium Partners
 
-4. **Configure database**
-Edit `.env` file:
-```env
-DB_DATABASE=your_database
-DB_USERNAME=your_username
-DB_PASSWORD=your_password
-```
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
+- **[OP.GG](https://op.gg)**
 
-5. **Run migrations**
-```bash
-php artisan migrate
-php artisan storage:link
-```
+## Contributing
 
-6. **Start development server**
-```bash
-php artisan serve
-npm run dev
-```
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-7. **Access application**
-- Frontend: `http://localhost:8000`
-- Admin: `http://localhost:8000/admin`
+## Code of Conduct
 
-## 👤 Default Admin
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-- **Email:** `admin@example.com`
-- **Password:** `password`
+## Security Vulnerabilities
 
-⚠️ **Important:** Change default credentials immediately!
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## 📁 Project Structure
+## License
 
-```
-├── app/
-│   ├── Http/
-│   │   └── Livewire/
-│   │       ├── Admin/              # Admin components
-│   │       └── Frontend/           # Frontend components
-│   └── Models/                     # Eloquent models
-├── resources/
-│   ├── views/
-│   │   ├── layouts/                # Layout templates
-│   │   └── livewire/              # Livewire views
-├── routes/
-│   ├── admin.php                   # Admin routes
-│   └── web.php                     # Frontend routes
-└── database/
-    └── migrations/                 # Database migrations
-```
-
-## 🎯 Usage
-
-### Admin Panel
-
-1. **Login** at `/admin` with admin credentials
-2. **Dashboard** shows statistics for all content
-3. **Manage Content** using sidebar navigation
-4. **Upload Images** using Media Manager
-5. **Create/Edit** using modal forms
-
-### Frontend
-
-- **Home** displays featured services, portfolio, and blog posts
-- **Services** page lists all services
-- **Portfolio** showcases projects
-- **Blog** includes search and individual post views
-- **Contact** form sends messages to admin
-
-## 🔧 Configuration
-
-### Media Storage
-Images are stored in `storage/app/public/cms/` and served via `public/storage`
-
-### File Upload Limits
-- Max file size: 2MB
-- Supported formats: Images (jpg, png, gif, svg)
-
-### Page Types
-- `home` - Homepage
-- `about` - About page
-- `contact` - Contact page
-
-## 🎨 Customization
-
-### Styles
-- Edit `resources/css/app.css`
-- Use Tailwind classes in Blade templates
-- Customize colors in `tailwind.config.js`
-
-### Content
-- Edit pages via Admin Panel
-- Or directly edit content in database
-- Use Media Manager for images
-
-### Layouts
-- Admin: `resources/views/layouts/admin.blade.php`
-- Frontend: `resources/views/layouts/frontend.blade.php`
-
-## 📱 Accessibility
-
-- Semantic HTML5
-- ARIA labels
-- Keyboard navigation
-- Screen reader support
-- WCAG 2.1 compliant
-
-## 🔒 Security
-
-- CSRF protection
-- XSS protection
-- SQL injection prevention
-- File upload validation
-- Admin authentication
-- Rate limiting
-
-## ⚡ Performance
-
-- Image optimization ready
-- Lazy loading capable
-- Database indexing
-- Caching support
-- Asset minification
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create feature branch
-3. Commit changes
-4. Push to branch
-5. Create Pull Request
-
-## 📄 License
-
-This project is open-source software.
-
-## 🆘 Support
-
-For issues and questions:
-- Open an issue on GitHub
-- Check documentation
-- Review troubleshooting guide
-
-## 🔄 Updates
-
-Regular updates include:
-- Security patches
-- Feature enhancements
-- Bug fixes
-- Performance improvements
-
----
-
-**Built with ❤️ using Laravel & Livewire**
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

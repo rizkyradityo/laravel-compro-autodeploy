@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Media;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+#[Layout('layouts.admin')]
 class MediaIndex extends Component
 {
     use WithFileUploads;
@@ -13,12 +15,12 @@ class MediaIndex extends Component
     public string $search = '';
 
     // multiple uploads
-    public array $media = [];
+    public array $uploads = [];
 
     protected function rules(): array
     {
         return [
-            'media.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
+            'uploads.*' => ['image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'],
         ];
     }
 
@@ -26,7 +28,7 @@ class MediaIndex extends Component
     {
         $validated = $this->validate();
 
-        foreach ($validated['media'] ?? [] as $file) {
+        foreach ($validated['uploads'] ?? [] as $file) {
             $path = $file->store('cms', 'public');
 
             Media::create([
@@ -38,7 +40,7 @@ class MediaIndex extends Component
         }
 
         session()->flash('message', 'Media uploaded successfully.');
-        $this->reset(['media']);
+        $this->reset(['uploads']);
     }
 
     public function delete(Media $media): void

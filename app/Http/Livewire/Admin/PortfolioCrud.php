@@ -4,10 +4,12 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Media;
 use App\Models\Portfolio;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
+#[Layout('layouts.admin')]
 class PortfolioCrud extends Component
 {
     use WithPagination;
@@ -103,6 +105,18 @@ class PortfolioCrud extends Component
         $this->published = (bool) $portfolio->published;
         $this->photo = null;
         $this->isModalOpen = true;
+    }
+
+    public function toggleModal(): void
+    {
+        if ($this->isModalOpen) {
+            $this->resetForm();
+        } else {
+            $this->reset(['title', 'slug', 'description', 'meta_title', 'meta_description', 'published', 'photo']);
+            $this->portfolio = null;
+            $this->published = true;
+            $this->isModalOpen = true;
+        }
     }
 
     public function resetForm(): void

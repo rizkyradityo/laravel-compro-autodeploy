@@ -11,5 +11,15 @@ class ContactMessage extends Model
         'email',
         'subject',
         'message',
+        'media_id',
     ];
+
+    protected $casts = [
+        'read_at' => 'datetime',
+    ];
+
+    public function media()
+    {
+        return $this->belongsTo(Media::class);
+    }
 }

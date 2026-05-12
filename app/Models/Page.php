@@ -23,6 +23,6 @@ class Page extends Model
 
     public function media()
     {
-        return $this->morphOne(Media::class, 'mediaable');
+        return $this->belongsTo(Media::class);
     }
 }

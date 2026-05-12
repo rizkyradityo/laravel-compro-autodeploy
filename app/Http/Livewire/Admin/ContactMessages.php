@@ -2,10 +2,12 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ContactMessage;
 
+#[Layout('layouts.admin')]
 class ContactMessages extends Component
 {
     use WithPagination;

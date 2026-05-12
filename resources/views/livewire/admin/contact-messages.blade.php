@@ -1,7 +1,8 @@
 @push('styles', '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">')
-<div class="mb-4">
-    <h2 class="text-2xl font-bold text-gray-800">Contact Messages</h2>
-</div>
+<div>
+    <div class="mb-4">
+        <h2 class="text-2xl font-bold text-gray-800">Contact Messages</h2>
+    </div>
 
 <div class="flex flex-col sm:flex-row sm:gap-4 mb-4">
     <div class="flex items-center space-x-2">
@@ -14,8 +15,8 @@
     </div>
 </div>
 
-@if($message)
-    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ $message }}</div>
+@if(session('message'))
+    <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('message') }}</div>
 @endif
 
 @if($messages->count() > 0)
@@ -30,7 +31,9 @@
                                 <span class="text-sm text-gray-600">({{ $msg->email }})</span>
                                 @if(!$msg->read_at)
                                     <span class="px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">New</span>
-                                @endif
+@endif
+</div>
+
                             </div>
                             <h4 class="text-lg font-medium text-gray-900 mb-1">{{ $msg->subject }}</h4>
                             <p class="text-gray-700 whitespace-pre-wrap">{{ $msg->message }}</p>

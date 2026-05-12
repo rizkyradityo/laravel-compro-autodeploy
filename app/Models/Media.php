@@ -12,27 +12,7 @@ class Media extends Model
         'file_path',
         'mime_type',
         'size',
-        'mediaable_type',
-        'mediaable_id'
     ];
-
-    /**
-     * Polymorphic relationship to any model that can have media.
-     */
-    public function mediaable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-
-    public function posts()
-    {
-        return $this->morphMany(Post::class, 'mediaable');
-    }
-
-    public function contactMessages()
-    {
-        return $this->morphMany(ContactMessage::class, 'mediaable');
-    }
 
     /**
      * Get the URL for the media file.

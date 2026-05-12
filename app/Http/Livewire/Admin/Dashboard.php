@@ -7,8 +7,10 @@ use App\Models\Portfolio;
 use App\Models\Post;
 use App\Models\Service;
 use App\Models\User;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
+#[Layout('layouts.admin')]
 class Dashboard extends Component
 {
     public int $totalPages = 0;

@@ -26,12 +26,9 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
-    /**
-     * A post has one media item (cover image).
-     */
     public function media()
     {
-        return $this->morphOne(Media::class, 'media');
+        return $this->belongsTo(Media::class);
     }
 
     /**

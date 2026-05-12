@@ -2,11 +2,13 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\Page;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 
+#[Layout('layouts.admin')]
 class PageCrud extends Component
 {
     use WithPagination, WithFileUploads;
@@ -42,9 +44,17 @@ class PageCrud extends Component
 
     public function mount()
     {
-        // initial data may be empty; used when creating a new page
         $this->page = null;
         $this->published = true;
+    }
+
+    public function create()
+    {
+        $this->reset(['title', 'slug', 'content', 'meta_title', 'meta_description', 'type', 'published', 'photo']);
+        $this->page = null;
+        $this->published = true;
+        $this->type = 'home';
+        $this->isModalOpen = true;
     }
 
     public function refreshing()

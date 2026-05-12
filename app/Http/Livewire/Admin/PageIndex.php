@@ -2,9 +2,11 @@
 
 namespace App\Http\Livewire\Admin;
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use App\Models\Page;
 
+#[Layout('layouts.admin')]
 class PageIndex extends Component
 {
     public $search = '';

@@ -4,10 +4,12 @@ namespace App\Http\Livewire\Admin;
 
 use App\Models\Media;
 use App\Models\Service;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 
+#[Layout('layouts.admin')]
 class ServicesCrud extends Component
 {
     use WithPagination;
@@ -92,6 +94,20 @@ class ServicesCrud extends Component
     {
         $service->delete();
         session()->flash('message', 'Service deleted successfully.');
+    }
+
+    public function toggleModal(): void
+    {
+        if ($this->isModalOpen) {
+            $this->reset(['name', 'slug', 'description', 'meta_title', 'meta_description', 'published', 'photo']);
+            $this->service = null;
+            $this->isModalOpen = false;
+        } else {
+            $this->reset(['name', 'slug', 'description', 'meta_title', 'meta_description', 'published', 'photo']);
+            $this->service = null;
+            $this->published = true;
+            $this->isModalOpen = true;
+        }
     }
 
     public function edit(Service $service): void

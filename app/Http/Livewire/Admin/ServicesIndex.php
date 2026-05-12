@@ -3,9 +3,11 @@
 namespace App\Http\Livewire\Admin;
 
 use App\Models\Service;
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 use Livewire\WithPagination;
 
+#[Layout('layouts.admin')]
 class ServicesIndex extends Component
 {
     use WithPagination;

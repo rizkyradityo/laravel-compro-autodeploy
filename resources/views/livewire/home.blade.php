@@ -1,73 +1,83 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Company Profile</title>
-    @vite(['resources/js/app.js', 'resources/css/app.css'])
-</head>
-<body class="bg-gray-100">
-    {{-- Hero Section --}}
+<div>
     @if($homePage)
-        <section class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-20">
-            <div class="container mx-auto px-4">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4">{!! $homePage->title !!}</h1>
-                <p class="text-lg md:text-xl mb-8">{!! $homePage->content !!}</p>
-                {{-- Services Highlight --}}
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-                    @foreach($featuredServices as $service)
-                        <div class="bg-white text-center p-6 rounded-lg shadow hover:scale-105 transition-transform">
-                            <div class="mb-3"><!-- Icon placeholder --} -->
+        <section class="relative overflow-hidden pb-16">
+            <div class="pointer-events-none absolute inset-0 -z-10">
+                <div class="absolute -top-24 left-1/2 h-96 w-96 -translate-x-1/2 rounded-full bg-emerald-500/20 blur-3xl"></div>
+            </div>
+            <div class="text-center pt-16 pb-12">
+                <h1 class="text-5xl md:text-6xl font-bold tracking-tight text-white mb-6">{!! $homePage->title !!}</h1>
+                <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto">{!! $homePage->content !!}</p>
+            </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+                @foreach($featuredServices as $service)
+                    <div class="group rounded-2xl border border-white/10 bg-white/5 p-6 hover:border-emerald-400/30 hover:shadow-lg hover:shadow-emerald-500/5 transition">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/15 flex items-center justify-center mb-4">
+                            <i class="fas fa-cogs text-emerald-400 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-white mb-2">{!! $service->name !!}</h3>
+                        <p class="text-slate-300 text-sm">{!! $service->description !!}</p>
+                    </div>
+                @endforeach
+            </div>
+
+            @if($latestPortfolios->count() > 0)
+                <div class="mt-16">
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">Recent Work</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        @foreach($latestPortfolios as $portfolio)
+                            <div class="group rounded-2xl border border-white/10 bg-white/5 overflow-hidden hover:border-emerald-400/30 transition">
+                                <div class="relative overflow-hidden">
+                                    @php($mediaUrl = $portfolio->media ? asset($portfolio->media->file_path) : null)
+                                    @if($mediaUrl)
+                                        <img src="{{ $mediaUrl }}" alt="{!! $portfolio->title !!}" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300">
+                                    @else
+                                        <div class="w-full h-48 bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center">
+                                            <i class="fas fa-briefcase text-white text-5xl"></i>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="p-5">
+                                    <h4 class="font-semibold text-white mb-1">{!! $portfolio->title !!}</h4>
+                                    <p class="text-sm text-slate-300">{!! Str::limit($portfolio->description, 100) !!}</p>
+                                </div>
                             </div>
-                            <h3 class="text-xl font-semibold">{!! $service->name !!}</h3>
-                            <p class="mt-2 text-gray-600">{!! $service->description !!}</p>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-                {{-- Latest Portfolio Highlights --}}
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-                    @foreach($latestPortfolios as $portfolio)
-                        <div class="bg-white p-4 rounded-lg shadow hover:scale-105 transition-transform">
-                            <img src="{{ 
-                                \App\Models\Media::find($portfolio->media_id)?->file_path ?
-                                \App\Models\Media::find($portfolio->media_id)->file_path : '/images/placeholder.jpg'
-                            }}" alt="{!! $portfolio->title !!}" class="w-full h-48 object-cover rounded mb-2"/>
-                            <h4 class="font-semibold">{!! $portfolio->title !!}</h4>
-                            <p class="text-sm text-gray-600">{!! $portfolio->description !!}</p>
-                        </div>
-                    @endforeach
-                </div>
-                {{-- Latest Blog Posts --}}
-                <div class="mt-12">
-                    <h3 class="text-2xl font-semibold mb-4">Latest Blog Posts</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            @endif
+
+            @if($latestPosts->count() > 0)
+                <div class="mt-16">
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">Latest Blog Posts</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                         @foreach($latestPosts as $post)
-                            <a href="{{ route('blog.show', $post->slug) }}" class="block bg-white p-4 rounded-lg shadow hover:shadow-lg">
-                                <h5 class="font-medium">{{ $post->title }}</h5>
-                                <p class="text-sm text-gray-600 mt-1">{!! Str::limit($post->content, 100) !!}</p>
+                            <a href="{{ route('blog.show', $post->slug) }}" class="group rounded-2xl border border-white/10 bg-white/5 p-6 hover:border-emerald-400/30 hover:shadow-lg hover:shadow-emerald-500/5 transition">
+                                <div class="flex items-center gap-2 text-sm text-slate-400 mb-3">
+                                    <i class="fas fa-calendar"></i>
+                                    <span>{{ $post->created_at->format('M d, Y') }}</span>
+                                </div>
+                                <h5 class="font-semibold text-white mb-2 group-hover:text-emerald-300 transition">{{ $post->title }}</h5>
+                                <p class="text-sm text-slate-300">{{ Str::limit($post->content, 120) }}</p>
                             </a>
                         @endforeach
                     </div>
                 </div>
+            @endif
+        </section>
+
+        <section class="border-t border-white/10 py-16 text-center">
+            <div class="max-w-3xl mx-auto">
+                <h2 class="text-3xl font-bold text-white mb-4">About Us</h2>
+                <p class="text-slate-300 text-lg">{!! $homePage ? $homePage->content : 'Our company ...' }}</p>
+            </div>
+        </section>
+
+        <section class="border-t border-white/10 py-16">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-3xl font-bold text-white mb-8">Contact Us</h2>
+                <livewire:contact-form />
             </div>
         </section>
     @endif
-
-    {{-- About Summary (if separate page) --}}
-    <section class="py-12 bg-white">
-        <div class="container mx-auto px-4 max-w-3xl">
-            <h2 class="text-3xl font-bold mb-6">About Us</h2>
-            <p class="text-lg text-gray-700">{!! $homePage ? $homePage->content : 'Our company ...' }}</p>
-        </div>
-    </section>
-
-    {{-- Contact Form --}}
-    <section class="bg-gray-50 py-12">
-        <div class="container mx-auto px-4 max-w-3xl">
-            <h2 class="text-3xl font-bold mb-6">Contact Us</h2>
-            <livewire:contact-form />
-        </div>
-    </section>
-</body>
-</html>
+</div>
