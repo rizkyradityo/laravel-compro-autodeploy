@@ -50,10 +50,10 @@ class HomeComponent extends Component
 
             return view('livewire.home', [
                 'homePage' => null,
-                'featuredServices' => [],
-                'latestPortfolios' => [],
-                'latestPosts' => [],
-                'latestEvents' => [],
+                'featuredServices' => collect(),
+                'latestPortfolios' => collect(),
+                'latestPosts' => collect(),
+                'latestEvents' => collect(),
                 'totalEvents' => 0,
                 'totalRegistrations' => 0,
                 'totalMembers' => 0,
