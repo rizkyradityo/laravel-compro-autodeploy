@@ -1,118 +1,111 @@
-@push('styles', '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">')
 <div>
-    <div class="flex items-center justify-between mb-4">
-        <h2 class="text-2xl font-bold text-gray-800">Pages Management</h2>
-        <button type="button" wire:click="create" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-            <i class="fas fa-plus"></i> New Page
+    <div class="page-header">
+        <h1>{{ $pageTypeLabel }} Management</h1>
+        <p>Kelola halaman {{ strtolower($pageTypeLabel) }}.</p>
+    </div>
+
+    <div class="filter-bar">
+        <input type="text" class="form-input" wire:model="search" placeholder="Search pages..." />
+        <button wire:click="create" class="btn btn--primary">
+            <i class="fas fa-plus"></i> New {{ $pageTypeLabel }}
         </button>
     </div>
 
-    <div class="flex flex-col sm:flex-row sm:gap-4 mb-4">
-        <div class="flex items-center space-x-2">
-            <input type="text" wire:model="search" class="border rounded px-3 py-2 w-64" placeholder="Search pages..."/>
-        </div>
-    </div>
-
-    @if(session('message'))
-        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('message') }}</div>
-    @endif
-
-    <table class="w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="admin-table">
         <thead>
-            <tr class="bg-gray-100">
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Title</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Slug</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Type</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Status</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Actions</th>
+            <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th style="text-align:right;">Actions</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
-            @foreach($pages as $page)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3">{{ $page->title }}</td>
-                    <td class="px-4 py-3">{{ $page->slug }}</td>
-                    <td class="px-4 py-3">{{ ucfirst($page->type) }}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 text-xs rounded {{ $page->published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+        <tbody>
+            @forelse($pages as $page)
+                <tr>
+                    <td><strong>{{ $page->title }}</strong></td>
+                    <td style="color:#64748b;">/{{ $page->slug }}</td>
+                    <td><span class="badge badge--blue">{{ $page->type }}</span></td>
+                    <td>
+                        <span class="badge {{ $page->published ? 'badge--green' : 'badge--gray' }}">
                             {{ $page->published ? 'Published' : 'Draft' }}
                         </span>
                     </td>
-                    <td class="px-4 py-3">
-                        <button wire:click="edit({{ $page->id }})" class="text-indigo-600 hover:text-indigo-800 mr-2">
-                            <i class="fas fa-edit"></i> Edit
-                        </button>
-                        <button wire:click="delete({{ $page->id }})" class="text-red-600 hover:text-red-800" onclick="return confirm('Are you sure?')">
-                            <i class="fas fa-trash"></i> Delete
-                        </button>
+                    <td style="text-align:right;white-space:nowrap;">
+                        <button wire:click="edit({{ $page->id }})" class="btn btn--ghost btn--sm" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button wire:click="delete({{ $page->id }})" class="btn btn--ghost btn--sm" style="color:#ef4444;" onclick="return confirm('Are you sure?')" title="Delete"><i class="fas fa-trash"></i></button>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="5" style="text-align:center;padding:48px;color:#94a3b8;">
+                        <i class="fas fa-file" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
+                        No pages found.
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
-    <div class="mt-4">
+    <div class="pagination">
         {{ $pages->links() }}
     </div>
 
     @if($isModalOpen)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">{{ $page ? 'Edit' : 'Create' }} Page</h3>
-                    <button type="button" wire:click="$set('isModalOpen', false)" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
-                    </button>
+        <div class="modal-overlay" wire:click.self="$set('isModalOpen', false)">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>{{ $page ? 'Edit' : 'New' }} {{ $pageTypeLabel }}</h3>
+                    <button class="modal-close" wire:click="$set('isModalOpen', false)">&times;</button>
                 </div>
-                <form wire:submit="save">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Title</label>
-                        <input type="text" wire:model="title" class="w-full border rounded px-3 py-2"/>
-                        @error('title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
+                <div class="modal-body">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div>
+                            <label class="form-label">Title</label>
+                            <input class="form-input" wire:model="title" placeholder="Page title" />
+                            @error('title') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="form-label">Slug</label>
+                            <input class="form-input" wire:model="slug" placeholder="page-slug" />
+                            @error('slug') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="form-label">Type</label>
+                            <select class="form-input form-select" wire:model="type">
+                                <option value="home">Home</option>
+                                <option value="about">About</option>
+                                <option value="contact">Contact</option>
+                                <option value="edukasi_page">Edukasi</option>
+                                <option value="dokumentasi_page">Dokumentasi</option>
+                                <option value="tentang_kita_page">Tentang Kita</option>
+                            </select>
+                            @error('type') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="form-label" style="display:flex;align-items:center;gap:8px;margin-top:32px;">
+                                <input type="checkbox" wire:model="published" style="width:18px;height:18px;" /> Published
+                            </label>
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="form-label">Meta Title</label>
+                            <input class="form-input" wire:model="meta_title" placeholder="SEO title" />
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="form-label">Meta Description</label>
+                            <textarea class="form-input" wire:model="meta_description" rows="2"></textarea>
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="form-label">Content</label>
+                            <textarea class="form-input" wire:model="content" rows="8" placeholder="Page content (HTML)..."></textarea>
+                        </div>
                     </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Slug</label>
-                        <input type="text" wire:model="slug" class="w-full border rounded px-3 py-2"/>
-                        @error('slug') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Type</label>
-                        <select wire:model="type" class="w-full border rounded px-3 py-2">
-                            <option value="home">Home</option>
-                            <option value="about">About</option>
-                            <option value="contact">Contact</option>
-                        </select>
-                        @error('type') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Content</label>
-                        <textarea wire:model="content" rows="6" class="w-full border rounded px-3 py-2"></textarea>
-                        @error('content') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" wire:model="published" class="rounded"/>
-                            <span class="text-sm">Published</span>
-                        </label>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Photo</label>
-                        <input type="file" wire:model="photo" class="text-sm"/>
-                        @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Meta Title</label>
-                        <input type="text" wire:model="meta_title" class="w-full border rounded px-3 py-2"/>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Meta Description</label>
-                        <input type="text" wire:model="meta_description" class="w-full border rounded px-3 py-2"/>
-                    </div>
-                    <div class="flex justify-end gap-2">
-                        <button type="button" wire:click="$set('isModalOpen', false)" class="px-4 py-2 border rounded hover:bg-gray-50">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Save</button>
-                    </div>
-                </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn--secondary" wire:click="$set('isModalOpen', false)">Cancel</button>
+                    <button class="btn btn--primary" wire:click="save"><i class="fas fa-save"></i> {{ $page ? 'Update' : 'Create' }}</button>
+                </div>
             </div>
         </div>
     @endif

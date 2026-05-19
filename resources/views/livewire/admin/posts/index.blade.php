@@ -1,100 +1,112 @@
 <div>
-    <div class="mb-4">
-        <h2 class="text-2xl font-bold text-gray-800">Posts Management</h2>
+    <div class="page-header">
+        <h1>Artikel AMR</h1>
+        <p>Kelola artikel AMR.</p>
     </div>
 
-    <div class="flex flex-col sm:flex-row sm:gap-4 mb-4">
-        <div class="flex items-center space-x-2">
-            <input type="text" wire:model="search" class="border rounded px-3 py-2 w-64" placeholder="Search posts..."/>
-            <button wire:click="$set('isModalOpen', true)" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">
-                <i class="fas fa-plus"></i> New Post
-            </button>
-        </div>
+    <div class="filter-bar">
+        <input type="text" class="form-input" wire:model="search" placeholder="Search articles..." />
+        <button wire:click="$set('isModalOpen', true)" class="btn btn--primary">
+            <i class="fas fa-plus"></i> New Article
+        </button>
     </div>
 
-    @if(session('message'))
-        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ session('message') }}</div>
-    @endif
-
-    <table class="w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <table class="admin-table">
         <thead>
-            <tr class="bg-gray-100">
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Title</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Slug</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Status</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Date</th>
-                <th class="px-4 py-3 text-left text-xs font-medium text-gray-600 uppercase">Actions</th>
+            <tr>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th style="text-align:right;">Actions</th>
             </tr>
         </thead>
-        <tbody class="divide-y divide-gray-200">
-            @foreach($posts as $post)
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-3">{{ $post->title }}</td>
-                    <td class="px-4 py-3">{{ $post->slug }}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-1 text-xs rounded {{ $post->published ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+        <tbody>
+            @forelse($posts as $post)
+                <tr>
+                    <td><strong>{{ $post->title }}</strong></td>
+                    <td style="color:#64748b;font-size:.82rem;">{{ $post->slug }}</td>
+                    <td>
+                        <span class="badge {{ $post->published ? 'badge--green' : 'badge--gray' }}">
                             {{ $post->published ? 'Published' : 'Draft' }}
                         </span>
                     </td>
-                    <td class="px-4 py-3 text-sm text-gray-600">{{ $post->created_at->format('M d, Y') }}</td>
-                    <td class="px-4 py-3">
-                        <button wire:click="edit({{ $post->id }})" class="text-indigo-600 hover:text-indigo-800 mr-2">
-                            <i class="fas fa-edit"></i> Edit
+                    <td style="color:#64748b;font-size:.82rem;">{{ $post->created_at->format('M d, Y') }}</td>
+                    <td style="text-align:right;white-space:nowrap;">
+                        <button wire:click="edit({{ $post->id }})" class="btn btn--ghost btn--sm" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button wire:click="togglePublished({{ $post->id }})" class="btn btn--ghost btn--sm" title="Toggle Published">
+                            <i class="fas {{ $post->published ? 'fa-eye-slash' : 'fa-eye' }}"></i>
                         </button>
-                        <button wire:click="delete({{ $post->id }})" class="text-red-600 hover:text-red-800" onclick="return confirm('Are you sure?')">
-                            <i class="fas fa-trash"></i> Delete
+                        <button wire:click="delete({{ $post->id }})" class="btn btn--ghost btn--sm" style="color:#ef4444;" onclick="return confirm('Are you sure?')" title="Delete">
+                            <i class="fas fa-trash"></i>
                         </button>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="5" style="text-align:center;padding:48px;color:#94a3b8;">
+                        <i class="fas fa-newspaper" style="font-size:2rem;display:block;margin-bottom:8px;"></i>
+                        No articles found.
+                    </td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
-    <div class="mt-4">
+    <div class="pagination">
         {{ $posts->links() }}
     </div>
 
     @if($isModalOpen)
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-xl font-semibold">{{ $post ? 'Edit' : 'Create' }} Post</h3>
-                    <button wire:click="resetForm" class="text-gray-500 hover:text-gray-700">
-                        <i class="fas fa-times"></i>
+        <div class="modal-overlay" wire:click.self="$set('isModalOpen', false)">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3>{{ $post ? 'Edit Article' : 'New Article' }}</h3>
+                    <button class="modal-close" wire:click="resetForm">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+                        <div style="grid-column:span 2;">
+                            <label class="form-label">Title</label>
+                            <input class="form-input" wire:model="title" placeholder="Article title" />
+                            @error('title') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="form-label">Slug</label>
+                            <input class="form-input" wire:model="slug" placeholder="article-slug" />
+                            @error('slug') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="form-label">Content</label>
+                            <textarea class="form-input" wire:model="content" rows="8" placeholder="Article content..."></textarea>
+                            @error('content') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                        <div>
+                            <label class="form-label">Meta Title</label>
+                            <input class="form-input" wire:model="meta_title" placeholder="SEO title" />
+                        </div>
+                        <div>
+                            <label class="form-label">Meta Description</label>
+                            <input class="form-input" wire:model="meta_description" placeholder="SEO description" />
+                        </div>
+                        <div>
+                            <label class="form-label" style="display:flex;align-items:center;gap:8px;margin-top:32px;">
+                                <input type="checkbox" wire:model="published" style="width:18px;height:18px;" /> Published
+                            </label>
+                        </div>
+                        <div>
+                            <label class="form-label">Featured Image</label>
+                            <input class="form-input" type="file" wire:model="photo" accept="image/*" />
+                            @error('photo') <span style="color:#ef4444;font-size:.78rem;">{{ $message }}</span> @enderror
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn--secondary" wire:click="resetForm">Cancel</button>
+                    <button class="btn btn--primary" wire:click="save">
+                        <i class="fas fa-save"></i> {{ $post ? 'Update' : 'Create' }}
                     </button>
                 </div>
-                <form wire:submit="save">
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Title</label>
-                        <input type="text" wire:model="title" class="w-full border rounded px-3 py-2"/>
-                        @error('title') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Slug</label>
-                        <input type="text" wire:model="slug" class="w-full border rounded px-3 py-2"/>
-                        @error('slug') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Content</label>
-                        <textarea wire:model="content" rows="6" class="w-full border rounded px-3 py-2"></textarea>
-                        @error('content') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="mb-4 flex items-center gap-4">
-                        <label class="flex items-center gap-2">
-                            <input type="checkbox" wire:model="published" class="rounded"/>
-                            <span class="text-sm">Published</span>
-                        </label>
-                    </div>
-                    <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">Featured Image</label>
-                        <input type="file" wire:model="photo" class="text-sm"/>
-                        @error('photo') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
-                    </div>
-                    <div class="flex justify-end gap-2">
-                        <button type="button" wire:click="resetForm" class="px-4 py-2 border rounded hover:bg-gray-50">Cancel</button>
-                        <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">Save</button>
-                    </div>
-                </form>
             </div>
         </div>
     @endif

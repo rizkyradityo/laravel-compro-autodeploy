@@ -1,49 +1,50 @@
 <div>
-    <h2 class="text-2xl font-bold text-gray-800 mb-6">Dashboard Overview</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-14 h-14 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-file text-blue-600 text-2xl"></i>
-            </div>
+    <div class="page-header">
+        <h1>Dashboard</h1>
+        <p>Selamat datang kembali, {{ auth()->user()->name }}! Berikut ringkasan sistem Anda.</p>
+    </div>
+
+    <div class="stat-grid">
+        <div class="stat-card">
+            <div class="stat-icon stat-icon--indigo"><i class="fas fa-file-lines"></i></div>
             <div>
-                <div class="text-3xl font-bold text-gray-900">{{ $totalPages }}</div>
-                <p class="text-gray-500 text-sm">Total Pages</p>
+                <div class="stat-number">{{ $totalPages }}</div>
+                <div class="stat-label">Total Pages</div>
             </div>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-14 h-14 rounded-xl bg-green-50 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-cogs text-green-600 text-2xl"></i>
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-icon--emerald"><i class="fas fa-cogs"></i></div>
             <div>
-                <div class="text-3xl font-bold text-gray-900">{{ $totalServices }}</div>
-                <p class="text-gray-500 text-sm">Total Services</p>
+                <div class="stat-number">{{ $totalServices }}</div>
+                <div class="stat-label">Total Services</div>
             </div>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-14 h-14 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-briefcase text-indigo-600 text-2xl"></i>
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-icon--amber"><i class="fas fa-briefcase"></i></div>
             <div>
-                <div class="text-3xl font-bold text-gray-900">{{ $totalPortfolios }}</div>
-                <p class="text-gray-500 text-sm">Total Portfolios</p>
+                <div class="stat-number">{{ $totalPortfolios }}</div>
+                <div class="stat-label">Total Portfolios</div>
             </div>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-14 h-14 rounded-xl bg-red-50 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-newspaper text-red-600 text-2xl"></i>
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-icon--rose"><i class="fas fa-newspaper"></i></div>
             <div>
-                <div class="text-3xl font-bold text-gray-900">{{ $totalPosts }}</div>
-                <p class="text-gray-500 text-sm">Total Posts</p>
+                <div class="stat-number">{{ $totalPosts }}</div>
+                <div class="stat-label">Total Posts</div>
             </div>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 flex items-center gap-4 hover:shadow-md transition">
-            <div class="w-14 h-14 rounded-xl bg-purple-50 flex items-center justify-center flex-shrink-0">
-                <i class="fas fa-users text-purple-600 text-2xl"></i>
-            </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-icon--purple"><i class="fas fa-users"></i></div>
             <div>
-                <div class="text-3xl font-bold text-gray-900">{{ $totalUsers }}</div>
-                <p class="text-gray-500 text-sm">Total Users</p>
+                <div class="stat-number">{{ $totalUsers }}</div>
+                <div class="stat-label">Total Users</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon stat-icon--sky"><i class="fas fa-calendar-alt"></i></div>
+            <div>
+                <div class="stat-number">{{ $totalEvents ?? 0 }}</div>
+                <div class="stat-label">Total Events</div>
             </div>
         </div>
     </div>

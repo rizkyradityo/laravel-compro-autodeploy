@@ -88,6 +88,12 @@ class PostCrud extends Component
         $this->resetForm();
     }
 
+    public function togglePublished(Post $post): void
+    {
+        $post->update(['published' => ! $post->published]);
+        session()->flash('message', 'Post status updated.');
+    }
+
     public function delete(Post $post): void
     {
         $post->delete();

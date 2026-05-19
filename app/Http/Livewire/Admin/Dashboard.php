@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire\Admin;
 
+use App\Models\Event;
 use App\Models\Page;
 use App\Models\Portfolio;
 use App\Models\Post;
@@ -18,6 +19,7 @@ class Dashboard extends Component
     public int $totalPortfolios = 0;
     public int $totalPosts = 0;
     public int $totalUsers = 0;
+    public int $totalEvents = 0;
 
     public function mount(): void
     {
@@ -27,6 +29,7 @@ class Dashboard extends Component
             $this->totalPortfolios = Portfolio::count();
             $this->totalPosts = Post::count();
             $this->totalUsers = User::count();
+            $this->totalEvents = Event::count();
         } catch (\Throwable $e) {
             session()->flash('error', 'Failed to load dashboard data. Please try again.');
         }

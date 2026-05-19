@@ -3,45 +3,62 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use App\Models\Event;
+use App\Models\EventRegistration;
+use App\Models\Donation;
+use App\Models\User;
 
 class HomeComponent extends Component
 {
     public function render()
     {
         try {
-            // Fetch the 'home' page (type = 'home') if exists
             $homePage = \App\Models\Page::where('type', 'home')->first();
-            
-            // Fetch featured services (e.g., published and latest 3)
+
             $featuredServices = \App\Models\Service::where('published', true)
                 ->orderBy('created_at', 'desc')->take(3)->get();
 
-            // Fetch latest portfolios (published) – show a few images
             $latestPortfolios = \App\Models\Portfolio::where('published', true)
                 ->orderBy('created_at', 'desc')->take(6)->get();
 
-            // Fetch latest blog posts (published) – latest 5
             $latestPosts = \App\Models\Post::where('published', true)
                 ->orderBy('created_at', 'desc')->take(5)->get();
 
-            // Return view with data
+            $latestEvents = Event::where('published', true)
+                ->orderBy('event_date', 'desc')
+                ->take(3)
+                ->get();
+
+            $totalEvents = Event::where('published', true)->count();
+            $totalRegistrations = EventRegistration::count();
+            $totalMembers = User::count();
+            $totalDonations = Donation::where('payment_status', 'paid')->sum('amount');
+
             return view('livewire.home', [
                 'homePage' => $homePage,
                 'featuredServices' => $featuredServices,
                 'latestPortfolios' => $latestPortfolios,
                 'latestPosts' => $latestPosts,
+                'latestEvents' => $latestEvents,
+                'totalEvents' => $totalEvents,
+                'totalRegistrations' => $totalRegistrations,
+                'totalMembers' => $totalMembers,
+                'totalDonations' => $totalDonations,
             ]);
         } catch (\Exception $e) {
-            // In case of any database error, return default data
             session()->flash('error', 'Failed to load home page data. Please try again.');
-            
+
             return view('livewire.home', [
                 'homePage' => null,
                 'featuredServices' => [],
                 'latestPortfolios' => [],
                 'latestPosts' => [],
+                'latestEvents' => [],
+                'totalEvents' => 0,
+                'totalRegistrations' => 0,
+                'totalMembers' => 0,
+                'totalDonations' => 0,
             ]);
         }
     }
 }
-?>

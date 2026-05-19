@@ -14,7 +14,9 @@ class PageCrud extends Component
     use WithPagination, WithFileUploads;
 
     public $search = '';
+    public $filterType = '';
     public $isModalOpen = false;
+    public $pageTypeLabel = 'Page';
     public $page;
     public $title;
     public $slug;
@@ -33,7 +35,7 @@ class PageCrud extends Component
         return [
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'alpha_dash', 'max:255', 'unique:pages,slug,' . $pageId],
-            'type' => ['required', 'string', 'in:home,about,contact'],
+            'type' => ['required', 'string', 'in:home,about,contact,edukasi_page,dokumentasi_page,tentang_kita_page'],
             'content' => ['nullable', 'string'],
             'meta_title' => ['nullable', 'string', 'max:255'],
             'meta_description' => ['nullable', 'string', 'max:255'],
@@ -46,6 +48,16 @@ class PageCrud extends Component
     {
         $this->page = null;
         $this->published = true;
+        $this->filterType = request('type', '');
+        $labels = [
+            'edukasi_page' => 'Edukasi',
+            'dokumentasi_page' => 'Dokumentasi',
+            'tentang_kita_page' => 'Tentang Kita',
+        ];
+        $this->pageTypeLabel = $labels[$this->filterType] ?? 'Page';
+        if ($this->filterType) {
+            $this->type = $this->filterType;
+        }
     }
 
     public function create()
@@ -128,9 +140,14 @@ class PageCrud extends Component
     public function render()
     {
         $pagesQuery = Page::query();
+        if ($this->filterType) {
+            $pagesQuery->where('type', $this->filterType);
+        }
         if ($this->search) {
-            $pagesQuery->where('title', 'like', '%' . $this->search . '%')
-                       ->orWhere('slug', 'like', '%' . $this->search . '%');
+            $pagesQuery->where(function ($q) {
+                $q->where('title', 'like', '%' . $this->search . '%')
+                  ->orWhere('slug', 'like', '%' . $this->search . '%');
+            });
         }
         $pages = $pagesQuery->orderBy('created_at', 'desc')->paginate(15);
         return view('livewire.admin.pages.index', ['pages' => $pages]);
